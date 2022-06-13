@@ -135,18 +135,59 @@ LD_LIBRARY_PATH = ${SENZING_G2_DIR}/lib
 
 # ---- Linux ------------------------------------------------------------------
 
-target/linux/go-hello-xyzzy-dynamic:
-	GOOS=linux GOARCH=amd64 \
-		go build \
-			-a \
-			-ldflags " \
-				-X main.programName=${PROGRAM_NAME} \
-				-X main.buildVersion=${BUILD_VERSION} \
-				-X main.buildIteration=${BUILD_ITERATION} \
-	    	" \
-			${GO_PACKAGE_NAME}
+
+target/linux:
 	@mkdir -p $(TARGET_DIRECTORY)/linux || true
-	@mv $(PROGRAM_NAME) $(TARGET_DIRECTORY)/linux/go-hello-xyzzy-dynamic
+
+
+target/scratch:
+	@mkdir -p $(TARGET_DIRECTORY)/scratch || true
+
+
+target/linux/go-hello-xyzzy-dynamic: target/linux
+	GOOS=linux \
+	GOARCH=amd64 \
+	go build \
+		-a \
+		-ldflags " \
+			-X main.programName=${PROGRAM_NAME} \
+			-X main.buildVersion=${BUILD_VERSION} \
+			-X main.buildIteration=${BUILD_ITERATION} \
+			" \
+		-o $(TARGET_DIRECTORY)/linux/go-hello-xyzzy-dynamic
+
+
+target/linux/go-hello-xyzzy-static: target/linux
+	GOOS=linux \
+	GOARCH=amd64 \
+	go build \
+		-a \
+		-ldflags " \
+			-X main.programName=${PROGRAM_NAME} \
+			-X main.buildVersion=${BUILD_VERSION} \
+			-X main.buildIteration=${BUILD_ITERATION} \
+			-extldflags \"-static\" \
+			" \
+		-o $(TARGET_DIRECTORY)/linux/go-hello-xyzzy-static
+
+
+target/scratch/xyzzy: target/scratch dependencies
+	GOOS=linux \
+	GOARCH=amd64 \
+	CGO_ENABLED=1 \
+	go build \
+		-a \
+		-installsuffix cgo \
+		-ldflags " \
+			-s \
+			-w \
+			-X main.programName=${PROGRAM_NAME} \
+			-X main.buildVersion=${BUILD_VERSION} \
+			-X main.buildIteration=${BUILD_ITERATION} \
+			-X github.com/docktermj/go-hello-world-module.helloName=${HELLO_NAME} \
+			" \
+		-o $(TARGET_DIRECTORY)/scratch/xyzzy
+
 
 # -----------------------------------------------------------------------------
 # Build
@@ -163,7 +204,13 @@ dependencies:
 
 
 .PHONY: build
-build: dependencies build-linux build-macos build-scratch build-windows
+build: dependencies \
+	target/linux/go-hello-xyzzy-dynamic \
+	target/scratch/xyzzy	
+#	target/linux/go-hello-xyzzy-static
+#	build-macos \
+#	build-scratch \
+#	build-windows
 
 
 .PHONY: build-linux
@@ -216,7 +263,7 @@ build-scratch:
 	    " \
 	  -o $(GO_PACKAGE_NAME)
 	@mkdir -p $(TARGET_DIRECTORY)/scratch || true
-	@mv $(GO_PACKAGE_NAME) $(TARGET_DIRECTORY)/scratch	
+	@mv $(GO_PACKAGE_NAME) $(TARGET_DIRECTORY)/scratch
 
 
 .PHONY: build-windows
@@ -257,6 +304,22 @@ docker-build:
 		--file Dockerfile \
 		--tag $(DOCKER_IMAGE_NAME) \
 		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
+		.
+
+
+
+
+.PHONY: docker-builder
+docker-builder:
+	@docker build \
+		--build-arg BUILD_ITERATION=$(BUILD_ITERATION) \
+		--build-arg BUILD_VERSION=$(BUILD_VERSION) \
+		--build-arg GO_PACKAGE_NAME=$(GO_PACKAGE_NAME) \
+		--build-arg PROGRAM_NAME=$(PROGRAM_NAME) \
+		--file Dockerfile \
+		--tag $(DOCKER_IMAGE_NAME) \
+		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
+		--target go_builder\
 		.
 
 
