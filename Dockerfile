@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 ARG IMAGE_GO_BUILDER=golang:1.18.3
-ARG IMAGE_FINAL=scratch
+ARG IMAGE_FINAL=gcr.io/distroless/base
 
 # -----------------------------------------------------------------------------
 # Stage: go_builder

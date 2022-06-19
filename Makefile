@@ -1,5 +1,7 @@
 # Makefile that builds go-hello-world, a "go" program.
 
+# "Simple expanded" variables (':=')
+
 # PROGRAM_NAME is the name of the GIT repository.
 PROGRAM_NAME := $(shell basename `git rev-parse --show-toplevel`)
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
@@ -13,9 +15,15 @@ BUILD_TAG := $(shell git describe --always --tags --abbrev=0)
 BUILD_ITERATION := $(shell git log $(BUILD_TAG)..HEAD --oneline | wc -l | sed 's/^ *//')
 GIT_REMOTE_URL := $(shell git config --get remote.origin.url)
 GO_PACKAGE_NAME := $(shell echo $(GIT_REMOTE_URL) | sed -e 's|^git@github.com:|github.com/|' -e 's|\.git$$||')
-SENZING_G2_DIR = /opt/senzing/g2
 
-CC=gcc
+# Recursive assignment ('=')
+
+CC = gcc
+
+# Conditional assignment. ('?=')
+
+SENZING_G2_DIR ?= /opt/senzing/g2
+
 
 # The first "make" target runs as default.
 
@@ -31,8 +39,13 @@ default: help
 # CGO_CFLAGS = -I$(MAKEFILE_DIRECTORY)lib
 # CGO_LDFLAGS = -L$(MAKEFILE_DIRECTORY)lib -llibg2diagnostic
 
+# Flags for the C compiler
+
 CGO_CFLAGS = \
 	-I${SENZING_G2_DIR}/sdk/c
+	
+# Flags for
+	
 CGO_LDFLAGS = \
 	-L${SENZING_G2_DIR}/lib \
 	-lanalytics \
@@ -135,16 +148,11 @@ LD_LIBRARY_PATH = ${SENZING_G2_DIR}/lib
 
 # ---- Linux ------------------------------------------------------------------
 
-
 target/linux:
 	@mkdir -p $(TARGET_DIRECTORY)/linux || true
 
 
-target/scratch:
-	@mkdir -p $(TARGET_DIRECTORY)/scratch || true
-
-
-target/linux/go-hello-xyzzy-dynamic: target/linux
+target/linux/$(PROGRAM_NAME): target/linux
 	GOOS=linux \
 	GOARCH=amd64 \
 	go build \
@@ -154,39 +162,7 @@ target/linux/go-hello-xyzzy-dynamic: target/linux
 			-X main.buildVersion=${BUILD_VERSION} \
 			-X main.buildIteration=${BUILD_ITERATION} \
 			" \
-		-o $(TARGET_DIRECTORY)/linux/go-hello-xyzzy-dynamic
-
-
-target/linux/go-hello-xyzzy-static: target/linux
-	GOOS=linux \
-	GOARCH=amd64 \
-	go build \
-		-a \
-		-ldflags " \
-			-X main.programName=${PROGRAM_NAME} \
-			-X main.buildVersion=${BUILD_VERSION} \
-			-X main.buildIteration=${BUILD_ITERATION} \
-			-extldflags \"-static\" \
-			" \
-		-o $(TARGET_DIRECTORY)/linux/go-hello-xyzzy-static
-
-
-target/scratch/xyzzy: target/scratch dependencies
-	GOOS=linux \
-	GOARCH=amd64 \
-	CGO_ENABLED=1 \
-	go build \
-		-a \
-		-installsuffix cgo \
-		-ldflags " \
-			-s \
-			-w \
-			-X main.programName=${PROGRAM_NAME} \
-			-X main.buildVersion=${BUILD_VERSION} \
-			-X main.buildIteration=${BUILD_ITERATION} \
-			-X github.com/docktermj/go-hello-world-module.helloName=${HELLO_NAME} \
-			" \
-		-o $(TARGET_DIRECTORY)/scratch/xyzzy
+		-o $(TARGET_DIRECTORY)/linux/$(PROGRAM_NAME)
 
 
 # -----------------------------------------------------------------------------
@@ -205,81 +181,8 @@ dependencies:
 
 .PHONY: build
 build: dependencies \
-	target/linux/go-hello-xyzzy-dynamic \
-	target/scratch/xyzzy	
-#	target/linux/go-hello-xyzzy-static
-#	build-macos \
-#	build-scratch \
-#	build-windows
+	target/linux/$(PROGRAM_NAME)
 
-
-.PHONY: build-linux
-build-linux:
-	@GOOS=linux \
-	GOARCH=amd64 \
-	go build \
-	  -ldflags \
-	    "-X main.programName=${PROGRAM_NAME} \
-	     -X main.buildVersion=${BUILD_VERSION} \
-	     -X main.buildIteration=${BUILD_ITERATION} \
-	     -X github.com/docktermj/go-hello-world-module.helloName=${HELLO_NAME} \
-	    " \
-	  -o $(GO_PACKAGE_NAME)
-	@mkdir -p $(TARGET_DIRECTORY)/linux || true
-	@mv $(GO_PACKAGE_NAME) $(TARGET_DIRECTORY)/linux
-
-
-.PHONY: build-macos
-build-macos:
-	@GOOS=darwin \
-	GOARCH=amd64 \
-	go build \
-	  -ldflags \
-	    "-X main.programName=${PROGRAM_NAME} \
-	     -X main.buildVersion=${BUILD_VERSION} \
-	     -X main.buildIteration=${BUILD_ITERATION} \
-	     -X github.com/docktermj/go-hello-world-module.helloName=${HELLO_NAME} \
-	    " \
-	  -o $(GO_PACKAGE_NAME)
-	@mkdir -p $(TARGET_DIRECTORY)/darwin || true
-	@mv $(GO_PACKAGE_NAME) $(TARGET_DIRECTORY)/darwin
-
-
-.PHONY: build-scratch
-build-scratch:
-	@GOOS=linux \
-	GOARCH=amd64 \
-	CGO_ENABLED=0 \
-	go build \
-	  -a \
-      -installsuffix cgo \
-	  -ldflags \
-	    "-s \
-	     -w \
-	     -X main.programName=${PROGRAM_NAME} \
-	     -X main.buildVersion=${BUILD_VERSION} \
-	     -X main.buildIteration=${BUILD_ITERATION} \
-	     -X github.com/docktermj/go-hello-world-module.helloName=${HELLO_NAME} \
-	    " \
-	  -o $(GO_PACKAGE_NAME)
-	@mkdir -p $(TARGET_DIRECTORY)/scratch || true
-	@mv $(GO_PACKAGE_NAME) $(TARGET_DIRECTORY)/scratch
-
-
-.PHONY: build-windows
-build-windows:
-	@GOOS=windows \
-	GOARCH=amd64 \
-	go build \
-	  -ldflags \
-	    "-X main.programName=${PROGRAM_NAME} \
-	     -X main.buildVersion=${BUILD_VERSION} \
-	     -X main.buildIteration=${BUILD_ITERATION} \
-	     -X github.com/docktermj/go-hello-world-module.helloName=${HELLO_NAME} \
-	    " \
-	  -o $(GO_PACKAGE_NAME).exe
-	@mkdir -p $(TARGET_DIRECTORY)/windows || true
-	@mv $(GO_PACKAGE_NAME).exe $(TARGET_DIRECTORY)/windows
 
 # -----------------------------------------------------------------------------
 # Test
@@ -289,6 +192,14 @@ build-windows:
 test:
 	@go test -v $(GO_PACKAGE_NAME)/...
 
+# -----------------------------------------------------------------------------
+# Run
+# -----------------------------------------------------------------------------
+
+.PHONY: run
+run:
+	@target/linux/$(PROGRAM_NAME)
+	
 # -----------------------------------------------------------------------------
 # docker-build
 #  - https://docs.docker.com/engine/reference/commandline/build/
@@ -305,9 +216,6 @@ docker-build:
 		--tag $(DOCKER_IMAGE_NAME) \
 		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
 		.
-
-
-
 
 .PHONY: docker-builder
 docker-builder:
@@ -335,6 +243,15 @@ docker-build-package:
 		--tag $(DOCKER_BUILD_IMAGE_NAME) \
 		.
 
+
+.PHONY: docker-run
+docker-run:
+	@docker run \
+	    --interactive \
+	    --tty \
+	    --name $(DOCKER_CONTAINER_NAME) \
+	    $(DOCKER_IMAGE_NAME)
+
 # -----------------------------------------------------------------------------
 # Package
 # -----------------------------------------------------------------------------
@@ -358,24 +275,12 @@ run-linux-dynamic:
 # Utility targets
 # -----------------------------------------------------------------------------
 
-.PHONY: docker-run
-docker-run:
-	@docker run \
-	    --interactive \
-	    --tty \
-	    --name $(DOCKER_CONTAINER_NAME) \
-	    $(DOCKER_IMAGE_NAME)
-
-
 .PHONY: clean
 clean:
 	@go clean -cache
 	@docker rm --force $(DOCKER_CONTAINER_NAME) || true
 	@docker rmi --force $(DOCKER_IMAGE_NAME) $(DOCKER_BUILD_IMAGE_NAME) || true
 	@rm -rf $(TARGET_DIRECTORY) || true
-	@find . -type f -name '*.a' -exec rm {} +    # Remove recursively *.o files
-	@find . -type f -name '*.o' -exec rm {} +    # Remove recursively *.o files
-	@find . -type f -name '*.so' -exec rm {} +   # Remove recursively *.so files
 	@rm -f $(GOPATH)/bin/$(PROGRAM_NAME) || true
 
 
