@@ -23,7 +23,7 @@ CC = gcc
 # Conditional assignment. ('?=')
 
 SENZING_G2_DIR ?= /opt/senzing/g2
-XYZZY_DATABASE_URL ?= postgresql://postgres:postgres@127.0.0.1:5432/G2
+SENZING_DATABASE_URL ?= postgresql://postgres:postgres@127.0.0.1:5432/G2
 
 # The first "make" target runs as default.
 
@@ -35,9 +35,6 @@ default: help
 # -----------------------------------------------------------------------------
 
 .EXPORT_ALL_VARIABLES:
-
-# CGO_CFLAGS = -I$(MAKEFILE_DIRECTORY)lib
-# CGO_LDFLAGS = -L$(MAKEFILE_DIRECTORY)lib -llibg2diagnostic
 
 # Flags for the C compiler
 
@@ -173,8 +170,8 @@ target/linux/$(PROGRAM_NAME): target/linux
 
 .PHONY: dependencies
 dependencies:
-	@go get -u
-	@go get ./...
+	@go get -u ./...
+	@go get -t -u ./...
 	@go mod tidy
 	@go get -u github.com/jstemmer/go-junit-report
 
@@ -269,7 +266,7 @@ package: docker-build-package
 
 .PHONY: run-linux-dynamic
 run-linux-dynamic:
-	@target/linux/go-hello-xyzzy-dynamic
+	@target/linux/go-hello-senzing-dynamic
 
 # -----------------------------------------------------------------------------
 # Utility targets
@@ -278,8 +275,8 @@ run-linux-dynamic:
 .PHONY: clean
 clean:
 	@go clean -cache
-	@docker rm --force $(DOCKER_CONTAINER_NAME) || true
-	@docker rmi --force $(DOCKER_IMAGE_NAME) $(DOCKER_BUILD_IMAGE_NAME) || true
+	@docker rm --force $(DOCKER_CONTAINER_NAME) 2> /dev/null || true
+	@docker rmi --force $(DOCKER_IMAGE_NAME) $(DOCKER_BUILD_IMAGE_NAME) 2> /dev/null || true
 	@rm -rf $(TARGET_DIRECTORY) || true
 	@rm -f $(GOPATH)/bin/$(PROGRAM_NAME) || true
 

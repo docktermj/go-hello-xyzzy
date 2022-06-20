@@ -120,7 +120,7 @@
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib
-    export XYZZY_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/G2
+    export SENZING_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/G2
 
     cd ${GIT_REPOSITORY_DIR}/target/linux
     ./go-hello-xyzzy
