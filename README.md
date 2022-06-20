@@ -92,6 +92,7 @@
    [clone-repository](https://github.com/Senzing/knowledge-base/blob/main/HOWTO/clone-repository.md) to install the Git repository.
 
 1. Run tests.
+   Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
@@ -99,32 +100,49 @@
     ```
 
 1. Create binary.
+   Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make clean build
     ```
 
-1. Run binary.
+1. Run binary using `make`.
+   Example:
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
     make run
     ```
 
-1. :pencil2: Set environment variables.
-   Identify location of Senzing library.
+1. Run binary.
    Example:
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib
-    ```
-
-   Identify Database URL of database in docker-compose stack.
-   Example:
-
-    ```console
     export XYZZY_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/G2
+
+    cd ${GIT_REPOSITORY_DIR}/target/linux
+    ./go-hello-xyzzy
     ```
 
 ### Demonstrate with Docker
+
+
+
+1. Identify URL of database in testable stack.
+   Example:
+
+    ```console
+    python3
+    ```
+
+    ```python
+    import socket
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.connect(("8.8.8.8", 80))
+    print("export XYZZY_DATABASE_URL=postgresql://postgres:postgres@${0}127.0.0.1:5432/G2".format(sock.getsockname()[0]))
+    sock.close()
+    quit()
+    ```
