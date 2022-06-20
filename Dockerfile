@@ -68,6 +68,6 @@ ENV LD_LIBRARY_PATH=/opt/senzing/g2/lib
 
 # Copy files from prior step.
 
-COPY --from=go_builder /output/scratch/xyzzy /xyzzy
+COPY --from=go_builder /output /app
 
-ENTRYPOINT ["/xyzzy"]
+ENTRYPOINT ["/app/linux/go-hello-xyzzy"]
