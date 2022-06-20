@@ -164,7 +164,7 @@ TODO:
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.connect(("8.8.8.8", 80))
-    print("export SENZING_DATABASE_URL=postgresql://postgres:postgres@${0}:5432/G2".format(sock.getsockname()[0]))
+    print("export SENZING_DATABASE_URL=postgresql://postgres:postgres@{0}:5432/G2".format(sock.getsockname()[0]))
     sock.close()
     quit()
     ```
