@@ -143,8 +143,8 @@
 
     ```console
     rm -rf ~/docker-compose-var
-    rm -rf /etc/opt/senzing
-    rm -rf /var/opt/senzing
+    sudo rm -rf /etc/opt/senzing
+    sudo rm -rf /var/opt/senzing
     sudo rm -rf /opt/senzing
     ```
 
