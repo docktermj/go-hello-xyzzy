@@ -126,9 +126,31 @@
     ./go-hello-xyzzy
     ```
 
+1. In Senzing Entity Search Web App, search for "seaman".
+
+### Cleanup
+
+1. Bring down the testable stack.
+   Example:
+
+    ```console
+    cd ${DOCKER_COMPOSE_VAR}
+    sudo --preserve-env docker-compose down
+    ```
+
+1. Delete Senzing installation.
+   Example:
+
+    ```console
+    rm -rf ~/docker-compose-var
+    rm -rf /etc/opt/senzing
+    rm -rf /var/opt/senzing
+    sudo rm -rf /opt/senzing
+    ```
+
 ### Demonstrate with Docker
 
-
+TODO:
 
 1. Identify URL of database in testable stack.
    Example:
