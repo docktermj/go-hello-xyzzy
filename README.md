@@ -152,6 +152,14 @@
 
 TODO:
 
+1. Create docker image.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make docker-build
+    ```
+
 1. Identify URL of database in testable stack.
    Example:
 
@@ -167,4 +175,29 @@ TODO:
     print("export SENZING_DATABASE_URL=postgresql://postgres:postgres@{0}:5432/G2".format(sock.getsockname()[0]))
     sock.close()
     quit()
+    ```
+
+1. :pencil2: Identify Senzing files.
+   Example:
+
+    ```console
+    export SENZING_G2_DIR=/opt/senzing/g2
+    ```
+
+    ```console
+    export SENZING_DATA_DIR=/opt/senzing/data
+    ```
+
+1. Run docker container.
+   Example:
+
+    ```console
+    docker run \
+      --env SENZING_DATABASE_URL="${SENZING_DATABASE_URL}" \
+      --interactive \
+      --tty \
+      --rm \
+      --volume ${SENZING_G2_DIR}:/opt/senzing/g2 \
+      --volume ${SENZING_DATA_VERSION_DIR}:/opt/senzing/data \
+      dockter/go-hello-xyzzy:latest
     ```

@@ -29,7 +29,7 @@ func getG2diagnostic(ctx context.Context) (g2diagnostic.G2diagnostic, error) {
 	g2diagnostic := g2diagnostic.G2diagnosticImpl{}
 
 	moduleName := "Test module name"
-	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
+	verboseLogging := 1 // 0 for no Senzing logging; 1 for logging
 	iniParams, jsonErr := g2helper.BuildSimpleSystemConfigurationJson()
 	if jsonErr != nil {
 		return &g2diagnostic, jsonErr
@@ -44,7 +44,7 @@ func getG2engine(ctx context.Context) (g2engine.G2engine, error) {
 	g2engine := g2engine.G2engineImpl{}
 
 	moduleName := "Test module name"
-	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
+	verboseLogging := 1 // 0 for no Senzing logging; 1 for logging
 	iniParams, jsonErr := g2helper.BuildSimpleSystemConfigurationJson()
 	if jsonErr != nil {
 		return &g2engine, jsonErr
