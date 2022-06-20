@@ -33,7 +33,7 @@ COPY --from=senzing/installer:3.1.0  "/opt/local-senzing" "/opt/senzing"
 # Build go program.
 
 WORKDIR ${GOPATH}/src/${GO_PACKAGE_NAME}
-RUN make target/scratch/xyzzy
+RUN make target/linux/go-hello-xyzzy
 
 # --- Test go program ---------------------------------------------------------
 
