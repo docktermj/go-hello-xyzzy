@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/docktermj/g2-sdk-go/g2diagnostic"
+	"github.com/docktermj/g2-sdk-go/g2engine"
+	"github.com/docktermj/g2-sdk-go/g2helper"
 	"github.com/docktermj/go-logger/logger"
-	"github.com/docktermj/xyzzygoapi/g2diagnostic"
-	"github.com/docktermj/xyzzygoapi/g2engine"
-	"github.com/docktermj/xyzzygoapi/g2helper"
 )
 
 // Values updated via "go install -ldflags" parameters.
@@ -70,14 +70,14 @@ func main() {
 	log.SetFlags(log.Llongfile | log.Ldate | log.Lmicroseconds | log.LUTC)
 	logger.SetLevel(logger.LevelInfo)
 
-	// Work with G2diagnostic.
+	// Create a G2diagnostic object.
 
 	g2diagnostic, g2diagnosticErr := getG2diagnostic(ctx)
 	if g2diagnosticErr != nil {
 		logger.Info(g2diagnosticErr)
 	}
 
-	// g2diagnostic.CheckDBPerf
+	// Call g2diagnostic.CheckDBPerf
 
 	secondsToRun := 1
 	actual, err := g2diagnostic.CheckDBPerf(ctx, secondsToRun)
@@ -86,14 +86,14 @@ func main() {
 	}
 	fmt.Println(actual)
 
-	// Work with G2engine.
+	// Create a G2engine object.
 
 	g2engine, g2engineErr := getG2engine(ctx)
 	if g2engineErr != nil {
 		logger.Info(g2engineErr)
 	}
 
-	// g2engine.AddRecordWithInfo
+	// Call g2engine.AddRecordWithInfo
 
 	dataSourceCode := "TEST"
 	recordID := strconv.Itoa(rand.Intn(1000000000))

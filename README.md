@@ -120,7 +120,7 @@
 
     ```console
     export LD_LIBRARY_PATH=/opt/senzing/g2/lib
-    export XYZZY_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/G2
+    export SENZING_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/G2
 
     cd ${GIT_REPOSITORY_DIR}/target/linux
     ./go-hello-xyzzy
@@ -152,19 +152,57 @@
 
 TODO:
 
+1. Create docker image.
+   Example:
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make docker-build
+    ```
+
 1. Identify URL of database in testable stack.
    Example:
 
     ```console
     python3
-    ```
 
-    ```python
     import socket
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.connect(("8.8.8.8", 80))
-    print("export XYZZY_DATABASE_URL=postgresql://postgres:postgres@${0}127.0.0.1:5432/G2".format(sock.getsockname()[0]))
+    print("export SENZING_DATABASE_URL=postgresql://postgres:postgres@{0}:5432/G2".format(sock.getsockname()[0]))
     sock.close()
     quit()
+    ```
+
+    Copy/paste the `export SENZING_DATABASE_URL...` statement into the terminal.
+
+1. :pencil2: Identify Senzing files.
+   Example:
+
+    ```console
+    export SENZING_ETC_DIR=/etc/opt/senzing
+    ```
+
+    ```console
+    export SENZING_G2_DIR=/opt/senzing/g2
+    ```
+
+    ```console
+    export SENZING_DATA_VERSION_DIR=/opt/senzing/data
+    ```
+
+1. Run docker container.
+   Example:
+
+    ```console
+    docker run \
+      --env SENZING_DATABASE_URL="${SENZING_DATABASE_URL}" \
+      --interactive \
+      --tty \
+      --rm \
+      --volume ${SENZING_DATA_VERSION_DIR}:/opt/senzing/data \
+      --volume ${SENZING_ETC_DIR}:/etc/opt/senzing \
+      --volume ${SENZING_G2_DIR}:/opt/senzing/g2 \
+      dockter/go-hello-xyzzy:latest
     ```

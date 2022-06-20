@@ -3,8 +3,8 @@ module github.com/docktermj/go-hello-xyzzy/v2
 go 1.18
 
 require (
+	github.com/docktermj/g2-sdk-go v0.0.0-20220620134953-ab8bde51840e
 	github.com/docktermj/go-logger v0.0.0-20180222005940-453860557ae2
-	github.com/docktermj/xyzzygoapi v0.0.0-20220619233837-d9ea03bb5afb
 )
 
 require (
