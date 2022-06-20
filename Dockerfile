@@ -3,17 +3,20 @@
 # -----------------------------------------------------------------------------
 
 ARG IMAGE_GO_BUILDER=golang:1.18.3
-ARG IMAGE_FINAL=gcr.io/distroless/base
+# ARG IMAGE_FINAL=gcr.io/distroless/base
+# ARG IMAGE_FINAL=debian:11.3-slim@sha256:06a93cbdd49a265795ef7b24fe374fee670148a7973190fb798e43b3cf7c5d0f
+# ARG IMAGE_FINAL=alpine:latest
+ARG IMAGE_FINAL=golang:1.18.3
 
 # -----------------------------------------------------------------------------
 # Stage: go_builder
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_GO_BUILDER} as go_builder
-ENV REFRESHED_AT 2022-06-11
+ENV REFRESHED_AT 2022-06-20
 LABEL Name="dockter/hello-xyzzy" \
       Maintainer="nemo@dockter.com" \
-      Version="0.0.1"
+      Version="0.0.2"
 
 # Build arguments.
 
@@ -43,6 +46,20 @@ RUN make target/linux/go-hello-xyzzy
 #  && mkdir -p /output/go-junit-report \
 #  && go test -v ${GO_PACKAGE_NAME}/... | go-junit-report > /output/go-junit-report/test-report.xml
 
+# Install packages via apt.
+
+RUN apt-get update \
+ && apt-get -y install \
+      libaio1 \
+      libodbc1 \
+      librdkafka-dev \
+      libssl1.1 \
+      libxml2 \
+      postgresql-client \
+      unixodbc \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
 # Set path to libraries.
 
 ENV LD_LIBRARY_PATH=/opt/senzing/g2/lib
@@ -57,10 +74,24 @@ RUN mkdir -p /output \
 # -----------------------------------------------------------------------------
 
 FROM ${IMAGE_FINAL} as final
-ENV REFRESHED_AT 2022-06-11a
+ENV REFRESHED_AT 2022-06-20
 LABEL Name="dockter/hello-xyzzy" \
       Maintainer="nemo@dockter.com" \
-      Version="0.0.1"
+      Version="0.0.2"
+
+# Install packages via apt.
+
+RUN apt-get update \
+ && apt-get -y install \
+      libaio1 \
+      libodbc1 \
+      librdkafka-dev \
+      libssl1.1 \
+      libxml2 \
+      postgresql-client \
+      unixodbc \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 # Set path to libraries.
 

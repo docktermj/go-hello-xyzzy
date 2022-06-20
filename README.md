@@ -189,7 +189,7 @@ TODO:
     ```
 
     ```console
-    export SENZING_DATA_DIR=/opt/senzing/data
+    export SENZING_DATA_VERSION_DIR=/opt/senzing/data
     ```
 
 1. Run docker container.
