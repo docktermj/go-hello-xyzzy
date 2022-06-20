@@ -165,9 +165,7 @@ TODO:
 
     ```console
     python3
-    ```
 
-    ```python
     import socket
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -177,8 +175,14 @@ TODO:
     quit()
     ```
 
+    Copy/paste the `export SENZING_DATABASE_URL...` statement into the terminal.
+
 1. :pencil2: Identify Senzing files.
    Example:
+
+    ```console
+    export SENZING_ETC_DIR=/etc/opt/senzing
+    ```
 
     ```console
     export SENZING_G2_DIR=/opt/senzing/g2
@@ -197,7 +201,8 @@ TODO:
       --interactive \
       --tty \
       --rm \
-      --volume ${SENZING_G2_DIR}:/opt/senzing/g2 \
       --volume ${SENZING_DATA_VERSION_DIR}:/opt/senzing/data \
+      --volume ${SENZING_ETC_DIR}:/etc/opt/senzing \
+      --volume ${SENZING_G2_DIR}:/opt/senzing/g2 \
       dockter/go-hello-xyzzy:latest
     ```
