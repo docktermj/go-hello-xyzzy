@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/docktermj/go-logger/logger"
 	"github.com/docktermj/xyzzygoapi/g2diagnostic"
@@ -60,6 +61,10 @@ func getG2engine(ctx context.Context) (g2engine.G2engine, error) {
 func main() {
 	ctx := context.TODO()
 
+	// Randomize random number generator.
+
+	rand.Seed(time.Now().UnixNano())
+
 	// Configure the "log" standard library.
 
 	log.SetFlags(log.Llongfile | log.Ldate | log.Lmicroseconds | log.LUTC)
@@ -88,7 +93,7 @@ func main() {
 		logger.Info(g2engineErr)
 	}
 
-	// g2engine.AddRecord
+	// g2engine.AddRecordWithInfo
 
 	dataSourceCode := "TEST"
 	recordID := strconv.Itoa(rand.Intn(1000000000))
@@ -98,9 +103,12 @@ func main() {
 		recordID,
 		`", "DSRC_ACTION": "A", "ADDR_CITY": "Delhi", "DRIVERS_LICENSE_STATE": "DE", "PHONE_NUMBER": "225-671-0796", "NAME_LAST": "SEAMAN", "entityid": "284430058", "ADDR_LINE1": "772 Armstrong RD"}`)
 	loadID := dataSourceCode
+	var flags int64 = 0
 
-	err = g2engine.AddRecord(ctx, dataSourceCode, recordID, jsonData, loadID)
-	if err != nil {
-		logger.Info(err)
+	withInfo, withInfoErr := g2engine.AddRecordWithInfo(ctx, dataSourceCode, recordID, jsonData, loadID, flags)
+	if withInfoErr != nil {
+		logger.Info(withInfoErr)
 	}
+
+	fmt.Printf("WithInfo: %s\n)", withInfo)
 }
