@@ -80,7 +80,7 @@ func main() {
 
 	g2diagnostic, g2diagnosticErr := getG2diagnostic(ctx)
 	if g2diagnosticErr != nil {
-		logger.LogMessageUsingError(MessageIdFormat, 1, "Running getG2diagnostic(ctx)", g2diagnosticErr)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running getG2diagnostic(ctx)", g2diagnosticErr)
 	}
 
 	// Call g2diagnostic.CheckDBPerf
@@ -89,7 +89,7 @@ func main() {
 	actual, err := g2diagnostic.CheckDBPerf(ctx, secondsToRun)
 	if err != nil {
 		logger.Info(err)
-		logger.LogMessageUsingError(MessageIdFormat, 1, "Running g2diagnostic.CheckDBPerf(ctx, secondsToRun)", g2diagnosticErr, secondsToRun)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running g2diagnostic.CheckDBPerf(ctx, secondsToRun)", g2diagnosticErr, strconv.Itoa(secondsToRun))
 
 	}
 	fmt.Println(actual)
@@ -98,7 +98,7 @@ func main() {
 
 	g2engine, g2engineErr := getG2engine(ctx)
 	if g2engineErr != nil {
-		logger.LogMessageUsingError(MessageIdFormat, 1, "Running getG2engine(ctx)", g2engineErr)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running getG2engine(ctx)", g2engineErr)
 	}
 
 	// Call g2engine.AddRecordWithInfo
@@ -115,7 +115,7 @@ func main() {
 
 	withInfo, withInfoErr := g2engine.AddRecordWithInfo(ctx, dataSourceCode, recordID, jsonData, loadID, flags)
 	if withInfoErr != nil {
-		logger.LogMessageUsingError(MessageIdFormat, 1, "Running g2engine.AddRecordWithInfo(ctx, dataSourceCode, recordID, jsonData, loadID, flags)", dataSourceCode, recordID, jsonData, loadID, flags)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running g2engine.AddRecordWithInfo(ctx, dataSourceCode, recordID, jsonData, loadID, flags)", withInfoErr, dataSourceCode, recordID, jsonData, loadID, strconv.FormatInt(flags, 2))
 	}
 
 	fmt.Printf("WithInfo: %s\n)", withInfo)

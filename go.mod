@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/docktermj/g2-sdk-go v0.0.0-20220620134953-ab8bde51840e
-	github.com/docktermj/go-xyzzy-helpers v0.0.0-20220622000406-7892f514a1e9
+	github.com/docktermj/go-xyzzy-helpers v0.0.0-20220622023154-add3a7e9c9b8
 )
 
 require (
