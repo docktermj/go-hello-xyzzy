@@ -10,8 +10,7 @@ import (
 
 	"github.com/docktermj/g2-sdk-go/g2diagnostic"
 	"github.com/docktermj/g2-sdk-go/g2engine"
-	"github.com/docktermj/g2-sdk-go/g2helper"
-	"github.com/docktermj/go-logger/logger"
+	"github.com/docktermj/go-xyzzy-helpers/logger"
 )
 
 // Values updated via "go install -ldflags" parameters.
@@ -30,7 +29,7 @@ func getG2diagnostic(ctx context.Context) (g2diagnostic.G2diagnostic, error) {
 
 	moduleName := "Test module name"
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2helper.BuildSimpleSystemConfigurationJson()
+	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		return &g2diagnostic, jsonErr
 	}
@@ -45,7 +44,7 @@ func getG2engine(ctx context.Context) (g2engine.G2engine, error) {
 
 	moduleName := "Test module name"
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2helper.BuildSimpleSystemConfigurationJson()
+	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		return &g2engine, jsonErr
 	}
