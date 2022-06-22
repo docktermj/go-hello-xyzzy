@@ -4,10 +4,10 @@ go 1.18
 
 require (
 	github.com/docktermj/g2-sdk-go v0.0.0-20220620134953-ab8bde51840e
-	github.com/docktermj/go-logger v0.0.0-20180222005940-453860557ae2
+	github.com/docktermj/go-xyzzy-helpers v0.0.0-20220622000406-7892f514a1e9
 )
 
 require (
-	github.com/docktermj/go-json-log-message v0.0.0-20220619011214-a5b452091468 // indirect
+	github.com/docktermj/go-json-log-message v0.0.0-20220621012852-98bf4a26e37a // indirect
 	github.com/jstemmer/go-junit-report v1.0.0 // indirect
 )
