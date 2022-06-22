@@ -10,8 +10,8 @@ import (
 
 	"github.com/docktermj/g2-sdk-go/g2diagnostic"
 	"github.com/docktermj/g2-sdk-go/g2engine"
-	"github.com/docktermj/g2-sdk-go/g2helper"
-	"github.com/docktermj/go-logger/logger"
+	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
+	"github.com/docktermj/go-xyzzy-helpers/logger"
 )
 
 // Values updated via "go install -ldflags" parameters.
@@ -19,6 +19,12 @@ import (
 var programName string = "unknown"
 var buildVersion string = "0.0.0"
 var buildIteration string = "0"
+
+// ----------------------------------------------------------------------------
+// Constants
+// ----------------------------------------------------------------------------
+
+const MessageIdFormat = "senzing-9999%04d"
 
 // ----------------------------------------------------------------------------
 // Internal methods - names begin with lower case
@@ -30,7 +36,7 @@ func getG2diagnostic(ctx context.Context) (g2diagnostic.G2diagnostic, error) {
 
 	moduleName := "Test module name"
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2helper.BuildSimpleSystemConfigurationJson()
+	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		return &g2diagnostic, jsonErr
 	}
@@ -45,7 +51,7 @@ func getG2engine(ctx context.Context) (g2engine.G2engine, error) {
 
 	moduleName := "Test module name"
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2helper.BuildSimpleSystemConfigurationJson()
+	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		return &g2engine, jsonErr
 	}
@@ -74,7 +80,7 @@ func main() {
 
 	g2diagnostic, g2diagnosticErr := getG2diagnostic(ctx)
 	if g2diagnosticErr != nil {
-		logger.Info(g2diagnosticErr)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running getG2diagnostic(ctx)", g2diagnosticErr)
 	}
 
 	// Call g2diagnostic.CheckDBPerf
@@ -83,6 +89,8 @@ func main() {
 	actual, err := g2diagnostic.CheckDBPerf(ctx, secondsToRun)
 	if err != nil {
 		logger.Info(err)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running g2diagnostic.CheckDBPerf(ctx, secondsToRun)", g2diagnosticErr, strconv.Itoa(secondsToRun))
+
 	}
 	fmt.Println(actual)
 
@@ -90,7 +98,7 @@ func main() {
 
 	g2engine, g2engineErr := getG2engine(ctx)
 	if g2engineErr != nil {
-		logger.Info(g2engineErr)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running getG2engine(ctx)", g2engineErr)
 	}
 
 	// Call g2engine.AddRecordWithInfo
@@ -107,7 +115,7 @@ func main() {
 
 	withInfo, withInfoErr := g2engine.AddRecordWithInfo(ctx, dataSourceCode, recordID, jsonData, loadID, flags)
 	if withInfoErr != nil {
-		logger.Info(withInfoErr)
+		logger.LogMessageFromError(MessageIdFormat, 1, "Running g2engine.AddRecordWithInfo(ctx, dataSourceCode, recordID, jsonData, loadID, flags)", withInfoErr, dataSourceCode, recordID, jsonData, loadID, strconv.FormatInt(flags, 2))
 	}
 
 	fmt.Printf("WithInfo: %s\n)", withInfo)

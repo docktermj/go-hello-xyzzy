@@ -1,10 +1,10 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/docktermj/g2-sdk-go v0.0.0-20220620134953-ab8bde51840e h1:NGiUmiqOzgtxfpHgVfFifL4SFzXsNATUwSTL1tQU9Os=
 github.com/docktermj/g2-sdk-go v0.0.0-20220620134953-ab8bde51840e/go.mod h1:Ry8GY29zotWLVq0W+gV0EMCdg2vOJaxfkFoxJJ2dumo=
-github.com/docktermj/go-json-log-message v0.0.0-20220619011214-a5b452091468 h1:ohxE4skp5Sn7RElferNkswyx7tF9HpsH1oDa8yRpncU=
-github.com/docktermj/go-json-log-message v0.0.0-20220619011214-a5b452091468/go.mod h1:gdXcuyLQRwMLeRFBXdtprtwDxaLpVgxaTTqqQ6XD6bs=
-github.com/docktermj/go-logger v0.0.0-20180222005940-453860557ae2 h1:zwgU6jxfKAm/Q6EzWcWix9Xg58irtXln11Vg7CLWxvM=
-github.com/docktermj/go-logger v0.0.0-20180222005940-453860557ae2/go.mod h1:IHpQJZNrRQZVsVh2mL20r+mO0OQ3hFAfvv13n3aJq4s=
+github.com/docktermj/go-json-log-message v0.0.0-20220621012852-98bf4a26e37a h1:xfKaQ8cVQ9ccEu4QNrVKEPv4msCIC+A+E9RZP8E5Y50=
+github.com/docktermj/go-json-log-message v0.0.0-20220621012852-98bf4a26e37a/go.mod h1:gdXcuyLQRwMLeRFBXdtprtwDxaLpVgxaTTqqQ6XD6bs=
+github.com/docktermj/go-xyzzy-helpers v0.0.0-20220622023154-add3a7e9c9b8 h1:ghji2iXbBTx+8Aux7nMLqHp+AeB3qQmC4BbbmZTk2XY=
+github.com/docktermj/go-xyzzy-helpers v0.0.0-20220622023154-add3a7e9c9b8/go.mod h1:0567EsOiegmDDE3f57dEWaxMHfDKk6qBAKoDMIjt6fY=
 github.com/jstemmer/go-junit-report v1.0.0 h1:8X1gzZpR+nVQLAht+L/foqOeX2l9DTZoaIPbEQHxsds=
 github.com/jstemmer/go-junit-report v1.0.0/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
